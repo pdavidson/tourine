@@ -2,6 +2,7 @@ package us.pdavidson.tourine;
 
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.base.MoreObjects;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,6 @@ public class TourineReporterBuilder {
     }
 
     public TourineReporter build() {
-        return new TourineReporter(registry, name, filter, rateUnit, durationUnit);
+        return new TourineReporter(registry, name, MoreObjects.firstNonNull(filter, MetricFilter.ALL) , rateUnit, durationUnit);
     }
 }

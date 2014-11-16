@@ -2,13 +2,13 @@ package us.pdavidson.tourine.example;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.startup.Tomcat;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import us.pdavidson.tourine.TourineReporter;
 import us.pdavidson.tourine.TourineReporterInstanceHolder;
+import us.pdavidson.tourine.servlet.TourineStreamingServlet;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -16,10 +16,11 @@ public class Main {
     static final MetricRegistry metrics = new MetricRegistry();
     private TourineReporter tourineReporter;
 
-    public static void main(String[] args) throws LifecycleException {
+    public static void main(String[] args) throws Exception {
 
         Main main = new Main();
-        main.registerConsoleReporter();
+//        main.registerConsoleReporter();
+        main.registerTourineReporter();
         main.start();
 
     }
@@ -42,19 +43,17 @@ public class Main {
     }
 
 
-    public void start() throws LifecycleException {
-        Tomcat tomcat = new Tomcat();
-        tomcat.setPort(8080);
+    public void start() throws Exception {
+        Server server = new Server(8080);
+        ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.NO_SESSIONS);
+        context.addServlet(new ServletHolder(new HelloServlet(metrics)), "/hello");
+        context.addServlet(new ServletHolder(new GoodbyeServlet(metrics)), "/bye");
+        context.addServlet(new ServletHolder(new TourineStreamingServlet()), "/tourine.stream");
+        server.start();
 
-        Context ctx = tomcat.addContext("/", new File(".").getAbsolutePath());
+        System.out.println("Started Jetty On Port 8080");
+        server.join();
 
-        Tomcat.addServlet(ctx, "hello", new HelloServlet(metrics));
-        Tomcat.addServlet(ctx, "bye", new GoodbyeServlet(metrics));
-        ctx.addServletMapping("/hello", "hello");
-        ctx.addServletMapping("/bye", "bye");
-
-        tomcat.start();
-        tomcat.getServer().await();
 
     }
 }

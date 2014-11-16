@@ -39,7 +39,9 @@ public class TourineReporter extends ScheduledReporter {
     protected void emitTimers(SortedMap<String, Timer> timers){
         for (Map.Entry<String, Timer> timerEntry: timers.entrySet()){
             try {
-                timerSubject.onNext(new TourineTimerJsonSupplier(timerEntry.getKey(), timerEntry.getValue(), jsonFactory).get());
+                String timerJson = new TourineTimerJsonSupplier(timerEntry.getKey(), timerEntry.getValue(), jsonFactory).get();
+                log.debug("Emitting JSON {}", timerJson);
+                timerSubject.onNext(timerJson);
             } catch (Exception e) {
                 log.error("Unable to Emit to the Subject for Timer {}", timerEntry.getKey(), e);
             }
