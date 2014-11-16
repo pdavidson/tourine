@@ -1,9 +1,24 @@
-Tourine
-=======
-Tourine is a Hystrix inspired Reporter for Metrics
+#Tourine: Hystrix inspired reporter for Metrics
 
+[Metrics](https://github.com/dropwizard/metrics) provides valuable realtime and historical data.
+[Hystrix Datahboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) provide a simple realtime view into hystrix commands.
+Tourine exposes Metrics as a Hystrix stream for use with [Turbine](https://github.com/Netflix/Turbine) and the Hystrix Dashboard.
 
-License
--------
-Copyright (c) 2014 Peter Davidson, pdavidson.us
-Published under Apache Software License 2.0, see LICENSE
+## Full Documentation
+
+See [Wiki](https://github.com/pdavidson/tourine/wiki) for full documentation and examples.
+
+##License
+Copyright 2014 Peter Davidson, pdavidson.us
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+<http://www.apache.org/licenses/LICENSE-2.0>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
