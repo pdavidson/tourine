@@ -1,0 +1,14 @@
+language: java
+
+install: echo "I trust Maven."
+
+
+script: mvn test
+
+jdk:
+  - oraclejdk7
+
+notifications:
+  email:
+    recipients:
+      - pdavidso@gmail.com
