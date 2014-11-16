@@ -4,6 +4,7 @@ import com.codahale.metrics.*;
 import com.fasterxml.jackson.core.JsonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 import java.util.Map;
@@ -24,7 +25,6 @@ public class TourineReporter extends ScheduledReporter {
                 .setRegistry(registry);
     }
 
-
     protected TourineReporter(MetricRegistry registry, String name, MetricFilter filter, TimeUnit rateUnit, TimeUnit durationUnit) {
         super(registry, name, filter, rateUnit, durationUnit);
     }
@@ -36,7 +36,6 @@ public class TourineReporter extends ScheduledReporter {
         }
     }
 
-
     protected void emitTimers(SortedMap<String, Timer> timers){
         for (Map.Entry<String, Timer> timerEntry: timers.entrySet()){
             try {
@@ -45,6 +44,15 @@ public class TourineReporter extends ScheduledReporter {
                 log.error("Unable to Emit to the Subject for Timer {}", timerEntry.getKey(), e);
             }
         }
+    }
+
+    /**
+     * Returns an Observable that Emits Timer Metric Events
+     *
+     * @return TourineTimer Json Object
+     */
+    public Observable<String> getTimerObservable(){
+        return timerSubject.asObservable();
     }
 
 }
