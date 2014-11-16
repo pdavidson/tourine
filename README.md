@@ -1,8 +1,12 @@
 #Tourine: Hystrix inspired reporter for Metrics
 
 [Metrics](https://github.com/dropwizard/metrics) provides valuable realtime and historical data.
-[Hystrix Datahboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) provide a simple realtime view into hystrix commands.
-Tourine exposes Metrics as a Hystrix stream for use with [Turbine](https://github.com/Netflix/Turbine) and the Hystrix Dashboard.
+[Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) provide a simple realtime view into hystrix commands.
+Tourine exposes Metrics as a Hystrix stream for use with the Hystrix Dashboard.
+
+Using [Turbine](https://github.com/Netflix/Turbine), the Tourine feed can been aggregated with the Hystrix Event stream
+to provide a consolidated view.
+
 
 ## Full Documentation
 
