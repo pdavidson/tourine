@@ -11,10 +11,6 @@ to provide a consolidated view.
 
 See [Wiki](https://github.com/pdavidson/tourine/wiki) for full documentation and examples.
 
-## Build
-
-Tourine
-
 ##License
 Copyright 2014 Peter Davidson, pdavidson.us
 
