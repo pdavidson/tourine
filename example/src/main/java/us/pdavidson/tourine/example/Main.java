@@ -6,6 +6,7 @@ import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 import us.pdavidson.tourine.TourineReporter;
+import us.pdavidson.tourine.TourineReporterInstanceHolder;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,7 @@ public class Main {
                 .setRateUnit(TimeUnit.SECONDS)
                 .build();
         this.tourineReporter.start(1, TimeUnit.SECONDS);
+        TourineReporterInstanceHolder.set(this.tourineReporter);
     }
 
     public void registerConsoleReporter() {
