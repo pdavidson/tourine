@@ -16,6 +16,9 @@ public class TourineReporter extends ScheduledReporter {
     private final PublishSubject<String> timerSubject = PublishSubject.create();
     private final JsonFactory jsonFactory = new JsonFactory();
     private final Class<? extends AbstractTimerJsonSupplier> timerSupplierClass;
+    private final double durationFactor;
+    private final double rateFactor;
+
     /**
      * Static Helper similar to ConsoleReporter
      * @param registry
@@ -29,12 +32,16 @@ public class TourineReporter extends ScheduledReporter {
     protected TourineReporter(MetricRegistry registry, String name, MetricFilter filter, TimeUnit rateUnit, TimeUnit durationUnit, TourineJsonFormat jsonType) {
         super(registry, name, filter, rateUnit, durationUnit);
 
+
+
         if (jsonType == TourineJsonFormat.HYSTRIX){
             timerSupplierClass = TourineTimerHystrixCommandJsonSupplier.class;
         } else{
             timerSupplierClass = TourineTimerJsonSupplier.class;
         }
 
+        durationFactor = 1.0 / durationUnit.toNanos(1);
+        rateFactor = rateUnit.toSeconds(1);
 
     }
 
@@ -48,7 +55,7 @@ public class TourineReporter extends ScheduledReporter {
     protected void emitTimers(SortedMap<String, Timer> timers){
         for (Map.Entry<String, Timer> timerEntry: timers.entrySet()){
             try {
-                AbstractTimerJsonSupplier supplier = timerSupplierClass.getConstructor(String.class, Timer.class, JsonFactory.class).newInstance(timerEntry.getKey(), timerEntry.getValue(), jsonFactory);
+                AbstractTimerJsonSupplier supplier = timerSupplierClass.getConstructor(String.class, Timer.class, JsonFactory.class, Double.class, Double.class).newInstance(timerEntry.getKey(), timerEntry.getValue(), jsonFactory, durationFactor, rateFactor);
                 String timerJson = supplier.get();
                 log.debug("Emitting JSON {}", timerJson);
                 timerSubject.onNext(timerJson);

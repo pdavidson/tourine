@@ -33,7 +33,7 @@ public class Main {
                 .setTourineJsonFormat(TourineJsonFormat.HYSTRIX)
                 .build();
         this.tourineReporter.start(1, TimeUnit.SECONDS);
-        TourineReporterInstanceHolder.set(this.tourineReporter);
+        TourineReporterInstanceHolder.set(TourineStreamingServlet.TOURINE_REPORTER_DEFAULT_KEY, this.tourineReporter);
     }
 
     public void registerConsoleReporter() {

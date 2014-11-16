@@ -9,15 +9,14 @@ import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.StringWriter;
 
-public class TourineTimerJsonSupplier extends AbstractTimerJsonSupplier {
+ class TourineTimerJsonSupplier extends AbstractTimerJsonSupplier {
 
-
-    public TourineTimerJsonSupplier(String name, Timer timer, JsonFactory jsonFactory) {
-        super(name, timer, jsonFactory);
+    public TourineTimerJsonSupplier(String name, Timer timer, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
+        super(name, timer, jsonFactory, durationFactor, rateFactor);
     }
 
-    protected TourineTimerJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory) {
-        super(name, timer, snapshot, jsonFactory);
+    protected TourineTimerJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
+        super(name, timer, snapshot, jsonFactory, durationFactor, rateFactor);
     }
 
     @Override

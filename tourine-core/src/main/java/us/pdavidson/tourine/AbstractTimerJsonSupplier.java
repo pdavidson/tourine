@@ -7,26 +7,26 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 
-import java.util.concurrent.TimeUnit;
-
 public abstract class AbstractTimerJsonSupplier implements Supplier<String> {
     protected final String name;
     protected final Timer timer;
     protected final Snapshot snapshot;
     protected final JsonFactory jsonFactory;
-    private static final double durationFactor = 1.0 / TimeUnit.MILLISECONDS.toNanos(1);
-    private static final double rateFactor = TimeUnit.SECONDS.toSeconds(1);
+    private final double durationFactor; //= 1.0 / TimeUnit.MILLISECONDS.toNanos(1);
+    private final double rateFactor; //= TimeUnit.SECONDS.toSeconds(1);
 
-    public AbstractTimerJsonSupplier(String name, Timer timer, JsonFactory jsonFactory) {
-        this(name, timer, timer.getSnapshot(), jsonFactory);
+    public AbstractTimerJsonSupplier(String name, Timer timer, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
+        this(name, timer, timer.getSnapshot(), jsonFactory, durationFactor, rateFactor);
     }
 
-    protected AbstractTimerJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory) {
+    protected AbstractTimerJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
         this.name = name;
         this.timer = timer;
         this.snapshot = snapshot;
         this.jsonFactory = jsonFactory;
 
+        this.durationFactor = durationFactor;
+        this.rateFactor = rateFactor;
     }
 
     protected double convertRate(double rate) {

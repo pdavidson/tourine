@@ -1,8 +1,11 @@
 package us.pdavidson.tourine.servlet;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,15 +14,26 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TourineStreamingServlet extends HttpServlet{
 
+public class TourineStreamingServlet extends HttpServlet{
+    protected static final String TOURINE_REPORTER_PARAM = "TourineReporter";
+    public static final String TOURINE_REPORTER_DEFAULT_KEY = "default";
     private static final Logger log = LoggerFactory.getLogger(TourineStreamingServlet.class);
 
     /* used to track number of connections and throttle */
     private static AtomicInteger concurrentConnections = new AtomicInteger(0);
     private static final Integer maxConcurrentConnections = 5;
     private boolean isDestroyed = false;
+    private String tourineReporterKey;
 
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        this.tourineReporterKey =
+                MoreObjects.firstNonNull(Strings.emptyToNull(config.getInitParameter(TOURINE_REPORTER_PARAM)), TOURINE_REPORTER_DEFAULT_KEY);
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
@@ -49,7 +63,7 @@ public class TourineStreamingServlet extends HttpServlet{
                 log.info("Connecting To Timer Poller");
 
                 TourinePoller.TourinePollerListener listener = new TourinePoller.TourinePollerListener();
-                poller = new TourinePoller(listener);
+                poller = new TourinePoller(listener, tourineReporterKey);
 
                 try {
                     while (poller.isRunning() && !isDestroyed) {

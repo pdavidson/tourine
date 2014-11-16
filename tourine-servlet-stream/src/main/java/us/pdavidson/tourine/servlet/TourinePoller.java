@@ -2,7 +2,6 @@ package us.pdavidson.tourine.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import us.pdavidson.tourine.TourineReporterInstanceHolder;
@@ -14,21 +13,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TourinePoller {
     private static final Logger log = LoggerFactory.getLogger(TourinePoller.class);
     private final TourinePollerListener listener;
+    private final String tourineInstanceKey;
     private final Subscription subscription;
     private boolean running;
 
-    public TourinePoller(final TourinePollerListener listener){
+    public TourinePoller(final TourinePollerListener listener, final String tourineInstanceKey){
         this.listener = listener;
+        this.tourineInstanceKey = tourineInstanceKey;
 
-        Observable<String> timerObservable = TourineReporterInstanceHolder.get().getTimerObservable();
-        subscription = timerObservable.subscribe(new Action1<String>() {
+        this.subscription = TourineReporterInstanceHolder
+                            .get(tourineInstanceKey)
+                                .getTimerObservable()
+                .subscribe(new Action1<String>() {
             @Override
             public void call(String json) {
                 listener.put(json);
             }
         });
-
-        running = true;
+        this.running = true;
     }
 
     public void shutdown() {
@@ -38,6 +40,14 @@ public class TourinePoller {
 
     public boolean isRunning() {
         return running;
+    }
+
+    public TourinePollerListener getListener() {
+        return listener;
+    }
+
+    public String getTourineInstanceKey() {
+        return tourineInstanceKey;
     }
 
     public static class TourinePollerListener {
@@ -56,6 +66,4 @@ public class TourinePoller {
 
 
     }
-
-
 }

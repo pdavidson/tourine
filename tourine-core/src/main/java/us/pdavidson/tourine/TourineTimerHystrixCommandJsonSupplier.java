@@ -9,13 +9,13 @@ import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.StringWriter;
 
-public class TourineTimerHystrixCommandJsonSupplier extends AbstractTimerJsonSupplier {
-    public TourineTimerHystrixCommandJsonSupplier(String name, Timer timer, JsonFactory jsonFactory) {
-        super(name, timer, jsonFactory);
+class TourineTimerHystrixCommandJsonSupplier extends AbstractTimerJsonSupplier {
+    public TourineTimerHystrixCommandJsonSupplier(String name, Timer timer, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
+        super(name, timer, jsonFactory, durationFactor, rateFactor);
     }
 
-    protected TourineTimerHystrixCommandJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory) {
-        super(name, timer, snapshot, jsonFactory);
+    protected TourineTimerHystrixCommandJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
+        super(name, timer, snapshot, jsonFactory, durationFactor, rateFactor);
     }
 
     @Override
