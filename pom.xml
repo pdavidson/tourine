@@ -9,6 +9,7 @@
         <module>example</module>
         <module>tourine-core</module>
         <module>tourine-servlet-stream</module>
+        <module>tourine-dashboard</module>
     </modules>
     <packaging>pom</packaging>
 
