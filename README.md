@@ -1,4 +1,4 @@
-#Tourine: Hystrix inspired reporter for Metrics
+#Tourine: Hystrix inspired reporter for Metrics [![Build Status](https://secure.travis-ci.org/pdavidson/tourine.png)](http://travis-ci.org/pdavidson/tourine)
 
 [Metrics](https://github.com/dropwizard/metrics) provides valuable realtime and historical data.
 [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) provide a simple realtime view into hystrix commands.
@@ -10,6 +10,10 @@ to provide a consolidated view.
 ## Full Documentation
 
 See [Wiki](https://github.com/pdavidson/tourine/wiki) for full documentation and examples.
+
+## Build
+
+Tourine
 
 ##License
 Copyright 2014 Peter Davidson, pdavidson.us
