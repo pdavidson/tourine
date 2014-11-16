@@ -31,7 +31,7 @@ public class TourineStreamingServlet extends HttpServlet{
                 response.sendError(503, "MaxConcurrentConnections reached: " + maxConcurrentConnections);
             } else {
 
-                int delay = 500;
+                int delay = 1000;
                 try {
                     String d = request.getParameter("delay");
                     if (d != null) {
@@ -46,7 +46,7 @@ public class TourineStreamingServlet extends HttpServlet{
                 response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
                 response.setHeader("Pragma", "no-cache");
 
-                log.info("Connecting To Timer Observable");
+                log.info("Connecting To Timer Poller");
 
                 TourinePoller.TourinePollerListener listener = new TourinePoller.TourinePollerListener();
                 poller = new TourinePoller(listener);
