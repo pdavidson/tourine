@@ -5,6 +5,7 @@ import com.codahale.metrics.MetricRegistry;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import us.pdavidson.tourine.TourineJsonFormat;
 import us.pdavidson.tourine.TourineReporter;
 import us.pdavidson.tourine.TourineReporterInstanceHolder;
 import us.pdavidson.tourine.servlet.TourineStreamingServlet;
@@ -19,7 +20,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Main main = new Main();
-//        main.registerConsoleReporter();
+        main.registerConsoleReporter();
         main.registerTourineReporter();
         main.start();
 
@@ -29,6 +30,7 @@ public class Main {
         this.tourineReporter = TourineReporter.forRegistry(metrics)
                 .setDurationUnit(TimeUnit.MILLISECONDS)
                 .setRateUnit(TimeUnit.SECONDS)
+                .setTourineJsonFormat(TourineJsonFormat.HYSTRIX)
                 .build();
         this.tourineReporter.start(1, TimeUnit.SECONDS);
         TourineReporterInstanceHolder.set(this.tourineReporter);

@@ -4,29 +4,20 @@ import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 import java.io.IOException;
 import java.io.StringWriter;
 
-public class TourineTimerJsonSupplier implements Supplier<String> {
-    private final String name;
-    private final Timer timer;
-    private final Snapshot snapshot;
-    private final JsonFactory jsonFactory;
+public class TourineTimerJsonSupplier extends AbstractTimerJsonSupplier {
 
 
     public TourineTimerJsonSupplier(String name, Timer timer, JsonFactory jsonFactory) {
-        this(name, timer, timer.getSnapshot(), jsonFactory);
+        super(name, timer, jsonFactory);
     }
 
-    public TourineTimerJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory) {
-        this.name = name;
-        this.timer = timer;
-        this.snapshot = snapshot;
-        this.jsonFactory = jsonFactory;
-
+    protected TourineTimerJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory) {
+        super(name, timer, snapshot, jsonFactory);
     }
 
     @Override
@@ -75,13 +66,7 @@ public class TourineTimerJsonSupplier implements Supplier<String> {
 
     }
 
-    private double convertRate(double rate) {
-        return rate;
-    }
 
-    private double convertDuration(double duration){
-        return duration;
-    }
 
     /*
        final Snapshot snapshot = timer.getSnapshot();

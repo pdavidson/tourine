@@ -12,6 +12,7 @@ public class TourineReporterBuilder {
     private MetricFilter filter;
     private TimeUnit rateUnit;
     private TimeUnit durationUnit;
+    private TourineJsonFormat tourineJsonFormat;
 
     public TourineReporterBuilder setRegistry(MetricRegistry registry) {
         this.registry = registry;
@@ -38,7 +39,18 @@ public class TourineReporterBuilder {
         return this;
     }
 
+    public TourineReporterBuilder setTourineJsonFormat(TourineJsonFormat tourineJsonFormat) {
+        this.tourineJsonFormat = tourineJsonFormat;
+        return this;
+    }
+
     public TourineReporter build() {
-        return new TourineReporter(registry, name, MoreObjects.firstNonNull(filter, MetricFilter.ALL) , rateUnit, durationUnit);
+        return new TourineReporter(
+                registry,
+                name,
+                MoreObjects.firstNonNull(filter, MetricFilter.ALL),
+                rateUnit,
+                durationUnit,
+                MoreObjects.firstNonNull(tourineJsonFormat, TourineJsonFormat.HYSTRIX));
     }
 }
