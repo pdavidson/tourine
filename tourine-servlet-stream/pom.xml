@@ -5,7 +5,7 @@
     <parent>
         <artifactId>tourine</artifactId>
         <groupId>us.pdavidson</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
         <dependency>
             <groupId>us.pdavidson</groupId>
             <artifactId>tourine-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
