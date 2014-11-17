@@ -30,7 +30,6 @@ public class TourineReporterTest {
     private TourineJsonFormat jsonType = TourineJsonFormat.HYSTRIX;
     private TimeUnit durationUnit = TimeUnit.MILLISECONDS;
     private TimeUnit rateUnit = TimeUnit.MILLISECONDS;
-    private String name = "Test";
     private MetricFilter filter = MetricFilter.ALL;
 
     @Mock
@@ -60,7 +59,7 @@ public class TourineReporterTest {
 
     @Before
     public void setUp() throws Exception {
-        reporter = spy(new TourineReporter(registry, name, filter, rateUnit, durationUnit, jsonType));
+        reporter = spy(new TourineReporter(registry, filter, rateUnit, durationUnit, jsonType));
         when(timer1.getSnapshot()).thenReturn(snapshot1);
         when(timer2.getSnapshot()).thenReturn(snapshot2);
         when(timer3.getSnapshot()).thenReturn(snapshot3);

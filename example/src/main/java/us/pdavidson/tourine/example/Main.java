@@ -28,9 +28,9 @@ public class Main {
 
     public void registerTourineReporter() {
         this.tourineReporter = TourineReporter.forRegistry(metrics)
-                .setDurationUnit(TimeUnit.MILLISECONDS)
-                .setRateUnit(TimeUnit.SECONDS)
-                .setTourineJsonFormat(TourineJsonFormat.HYSTRIX)
+                .withDurationUnit(TimeUnit.MILLISECONDS)
+                .withRateUnit(TimeUnit.SECONDS)
+                .withTourineJsonFormat(TourineJsonFormat.HYSTRIX)
                 .build();
         this.tourineReporter.start(1, TimeUnit.SECONDS);
         TourineReporterInstanceHolder.set(TourineStreamingServlet.TOURINE_REPORTER_DEFAULT_KEY, this.tourineReporter);

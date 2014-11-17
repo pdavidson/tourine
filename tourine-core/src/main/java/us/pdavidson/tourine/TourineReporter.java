@@ -24,9 +24,9 @@ public class TourineReporter extends ScheduledReporter {
     private static final Logger log = LoggerFactory.getLogger(TourineReporter.class);
     private final PublishSubject<String> timerSubject = PublishSubject.create();
     private final JsonFactory jsonFactory = new JsonFactory();
-    private final Class<? extends AbstractTimerJsonSupplier> timerSupplierClass;
     private final double durationFactor;
     private final double rateFactor;
+    private final TourineJsonFormat jsonType;
 
     /**
      * Static Builder similar to ConsoleReporter
@@ -35,22 +35,19 @@ public class TourineReporter extends ScheduledReporter {
      */
     public static TourineReporterBuilder forRegistry(MetricRegistry registry){
         return new TourineReporterBuilder()
-                .setRegistry(registry);
+                .withRegistry(registry);
     }
 
-    protected TourineReporter(MetricRegistry registry, String name, MetricFilter filter, TimeUnit rateUnit,
+    protected TourineReporter(MetricRegistry registry, MetricFilter filter, TimeUnit rateUnit,
                               TimeUnit durationUnit, TourineJsonFormat jsonType) {
 
-        super(Preconditions.checkNotNull(registry), Preconditions.checkNotNull(name),
-                Preconditions.checkNotNull(filter), Preconditions.checkNotNull(rateUnit), Preconditions.checkNotNull(durationUnit));
+        super(Preconditions.checkNotNull(registry, "Registry Cannot Be Null"),
+                "tourine-reporter",
+                Preconditions.checkNotNull(filter, "Filter Cannot be Null"),
+                Preconditions.checkNotNull(rateUnit, "RateUnit Cannot Be Null"),
+                Preconditions.checkNotNull(durationUnit, "DurationUnit Cannot Be Null"));
 
-        Preconditions.checkNotNull(jsonType);
-
-        if (jsonType == TourineJsonFormat.HYSTRIX){
-            timerSupplierClass = TourineTimerHystrixCommandJsonSupplier.class;
-        } else{
-            timerSupplierClass = TourineTimerJsonSupplier.class;
-        }
+        this.jsonType = Preconditions.checkNotNull(jsonType, "JsonType Cannot Be Null");
 
         durationFactor = 1.0 / durationUnit.toNanos(1);
         rateFactor = rateUnit.toSeconds(1);
@@ -67,14 +64,23 @@ public class TourineReporter extends ScheduledReporter {
     protected void emitTimers(SortedMap<String, Timer> timers){
         for (Map.Entry<String, Timer> timerEntry: timers.entrySet()){
             try {
-                AbstractTimerJsonSupplier supplier = timerSupplierClass.getConstructor(String.class, Timer.class, JsonFactory.class, Double.class, Double.class).newInstance(timerEntry.getKey(), timerEntry.getValue(), jsonFactory, durationFactor, rateFactor);
-                String timerJson = supplier.get();
+                String timerJson = getSupplier(timerEntry).get();
                 log.debug("Emitting JSON {}", timerJson);
                 timerSubject.onNext(timerJson);
             } catch (Exception e) {
                 log.error("Unable to Emit to the Subject for Timer {}", timerEntry.getKey(), e);
             }
         }
+    }
+
+    protected AbstractTimerJsonSupplier getSupplier(Map.Entry<String, Timer> timerEntry) {
+        AbstractTimerJsonSupplier supplier;
+        if (jsonType == TourineJsonFormat.HYSTRIX){
+            supplier = new TourineTimerHystrixCommandJsonSupplier(timerEntry.getKey(), timerEntry.getValue(), jsonFactory, durationFactor, rateFactor);
+        } else{
+            supplier = new TourineTimerJsonSupplier(timerEntry.getKey(), timerEntry.getValue(), jsonFactory, durationFactor, rateFactor);
+        }
+        return supplier;
     }
 
     /**

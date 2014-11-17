@@ -8,38 +8,34 @@ import java.util.concurrent.TimeUnit;
 
 public class TourineReporterBuilder {
     private MetricRegistry registry;
-    private String name;
     private MetricFilter filter;
     private TimeUnit rateUnit;
     private TimeUnit durationUnit;
     private TourineJsonFormat tourineJsonFormat;
 
-    public TourineReporterBuilder setRegistry(MetricRegistry registry) {
+    protected TourineReporterBuilder() {};
+
+    protected TourineReporterBuilder withRegistry(MetricRegistry registry) {
         this.registry = registry;
         return this;
     }
 
-    public TourineReporterBuilder setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public TourineReporterBuilder setFilter(MetricFilter filter) {
+    public TourineReporterBuilder withFilter(MetricFilter filter) {
         this.filter = filter;
         return this;
     }
 
-    public TourineReporterBuilder setRateUnit(TimeUnit rateUnit) {
+    public TourineReporterBuilder withRateUnit(TimeUnit rateUnit) {
         this.rateUnit = rateUnit;
         return this;
     }
 
-    public TourineReporterBuilder setDurationUnit(TimeUnit durationUnit) {
+    public TourineReporterBuilder withDurationUnit(TimeUnit durationUnit) {
         this.durationUnit = durationUnit;
         return this;
     }
 
-    public TourineReporterBuilder setTourineJsonFormat(TourineJsonFormat tourineJsonFormat) {
+    public TourineReporterBuilder withTourineJsonFormat(TourineJsonFormat tourineJsonFormat) {
         this.tourineJsonFormat = tourineJsonFormat;
         return this;
     }
@@ -47,7 +43,6 @@ public class TourineReporterBuilder {
     public TourineReporter build() {
         return new TourineReporter(
                 registry,
-                name,
                 MoreObjects.firstNonNull(filter, MetricFilter.ALL),
                 rateUnit,
                 durationUnit,

@@ -4,6 +4,7 @@ import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 
@@ -12,8 +13,8 @@ public abstract class AbstractTimerJsonSupplier implements Supplier<String> {
     protected final Timer timer;
     protected final Snapshot snapshot;
     protected final JsonFactory jsonFactory;
-    private final double durationFactor; //= 1.0 / TimeUnit.MILLISECONDS.toNanos(1);
-    private final double rateFactor; //= TimeUnit.SECONDS.toSeconds(1);
+    private final double durationFactor;
+    private final double rateFactor;
 
     public AbstractTimerJsonSupplier(String name, Timer timer, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
         this(name, timer, timer.getSnapshot(), jsonFactory, durationFactor, rateFactor);
@@ -38,7 +39,7 @@ public abstract class AbstractTimerJsonSupplier implements Supplier<String> {
     }
 
     protected String getName(String name) {
-        Iterable<String> strings = Splitter.on('.').split(name);
+        Iterable<String> strings = Splitter.on('.').split(Strings.nullToEmpty(name));
         return String.format("%s-%s", "Metrics", Iterables.getLast(strings, name));
     }
 }
