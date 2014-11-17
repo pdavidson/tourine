@@ -1,6 +1,5 @@
 package us.pdavidson.tourine;
 
-import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -17,9 +16,6 @@ class TourineTimerHystrixCommandJsonSupplier extends AbstractTimerJsonSupplier {
         super(name, timer, jsonFactory, durationFactor, rateFactor);
     }
 
-    protected TourineTimerHystrixCommandJsonSupplier(String name, Timer timer, Snapshot snapshot, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
-        super(name, timer, snapshot, jsonFactory, durationFactor, rateFactor);
-    }
 
     @Override
     public String get() {
