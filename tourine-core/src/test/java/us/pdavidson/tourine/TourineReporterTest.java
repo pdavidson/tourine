@@ -18,7 +18,7 @@ import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TourineReporterTest {
@@ -60,7 +60,7 @@ public class TourineReporterTest {
 
     @Before
     public void setUp() throws Exception {
-        reporter = new TourineReporter(registry, name, filter, rateUnit, durationUnit, jsonType);
+        reporter = spy(new TourineReporter(registry, name, filter, rateUnit, durationUnit, jsonType));
         when(timer1.getSnapshot()).thenReturn(snapshot1);
         when(timer2.getSnapshot()).thenReturn(snapshot2);
         when(timer3.getSnapshot()).thenReturn(snapshot3);
@@ -68,7 +68,7 @@ public class TourineReporterTest {
     }
 
     @Test
-    public void testReport() throws Exception {
+    public void testEmit() throws Exception {
         final List<String> list = Lists.newArrayList();
 
         reporter.getTimerObservable().subscribe(new Action1<String>() {
@@ -95,4 +95,23 @@ public class TourineReporterTest {
 
     }
 
+    @Test
+    public void testReport() throws Exception {
+        SortedMap<String, Timer> timers = Maps.newTreeMap();
+        timers.put("key1", timer1);
+        reporter.report(null, null, null, null, timers);
+
+        verify(reporter).emitTimers(timers);
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testReport_EmptyMap() throws Exception {
+
+        SortedMap<String, Timer> timers = Maps.newTreeMap();
+        reporter.report(null, null, null, null, timers);
+
+        verify(reporter, never()).emitTimers(any(SortedMap.class));
+    }
 }
