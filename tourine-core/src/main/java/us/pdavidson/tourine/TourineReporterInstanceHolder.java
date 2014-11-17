@@ -1,8 +1,11 @@
 package us.pdavidson.tourine;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -58,6 +61,12 @@ public class TourineReporterInstanceHolder {
      */
     public static boolean contains(String key){
         return instanceMap.containsKey(key);
+    }
+
+
+    @VisibleForTesting
+    protected static Set<String> keySet(){
+        return Sets.newHashSet(instanceMap.keySet()) ;
     }
 
 }
