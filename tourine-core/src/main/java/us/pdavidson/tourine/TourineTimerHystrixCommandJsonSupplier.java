@@ -9,6 +9,9 @@ import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.StringWriter;
 
+/**
+ * Converts a {@link com.codahale.metrics.Timer} to a Json object for consumption by the Hystrix dashboard.
+ */
 class TourineTimerHystrixCommandJsonSupplier extends AbstractTimerJsonSupplier {
     public TourineTimerHystrixCommandJsonSupplier(String name, Timer timer, JsonFactory jsonFactory, Double durationFactor, Double rateFactor) {
         super(name, timer, jsonFactory, durationFactor, rateFactor);
@@ -67,17 +70,17 @@ class TourineTimerHystrixCommandJsonSupplier extends AbstractTimerJsonSupplier {
             json.writeNumberField("100", convertDuration(snapshot.getMax()));
             json.writeEndObject();
             //
-            json.writeNumberField("latencyTotal_mean", 107);
+            json.writeNumberField("latencyTotal_mean", 0);
             json.writeObjectFieldStart("latencyTotal");
             json.writeNumberField("0", 0);
             json.writeNumberField("25", 0);
             json.writeNumberField("50", 0);
-            json.writeNumberField("75", 108);
-            json.writeNumberField("90", 109);
-            json.writeNumberField("95", 110);
-            json.writeNumberField("99", 11);
-            json.writeNumberField("99.5", 112);
-            json.writeNumberField("100", 113);
+            json.writeNumberField("75", 0);
+            json.writeNumberField("90", 0);
+            json.writeNumberField("95", 0);
+            json.writeNumberField("99", 0);
+            json.writeNumberField("99.5", 0);
+            json.writeNumberField("100", 0);
             json.writeEndObject();
 
             // property values for reporting what is actually seen by the command rather than what was set somewhere

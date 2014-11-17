@@ -11,6 +11,14 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class is a Metrics {@link com.codahale.metrics.ScheduledReporter} exposes reported metrics as Observables.
+ *
+ * As metrics are reported, they are serialized to configured format and emitted as json.
+ *
+ * Currently the only Metrics that are reported by Tourine are Timers.
+ *
+ */
 public class TourineReporter extends ScheduledReporter {
     private static final Logger log = LoggerFactory.getLogger(TourineReporter.class);
     private final PublishSubject<String> timerSubject = PublishSubject.create();
@@ -20,7 +28,7 @@ public class TourineReporter extends ScheduledReporter {
     private final double rateFactor;
 
     /**
-     * Static Helper similar to ConsoleReporter
+     * Static Builder similar to ConsoleReporter
      * @param registry
      * @return
      */
