@@ -2,6 +2,7 @@ package us.pdavidson.tourine;
 
 import com.codahale.metrics.*;
 import com.fasterxml.jackson.core.JsonFactory;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
@@ -37,10 +38,13 @@ public class TourineReporter extends ScheduledReporter {
                 .setRegistry(registry);
     }
 
-    protected TourineReporter(MetricRegistry registry, String name, MetricFilter filter, TimeUnit rateUnit, TimeUnit durationUnit, TourineJsonFormat jsonType) {
-        super(registry, name, filter, rateUnit, durationUnit);
+    protected TourineReporter(MetricRegistry registry, String name, MetricFilter filter, TimeUnit rateUnit,
+                              TimeUnit durationUnit, TourineJsonFormat jsonType) {
 
+        super(Preconditions.checkNotNull(registry), Preconditions.checkNotNull(name),
+                Preconditions.checkNotNull(filter), Preconditions.checkNotNull(rateUnit), Preconditions.checkNotNull(durationUnit));
 
+        Preconditions.checkNotNull(jsonType);
 
         if (jsonType == TourineJsonFormat.HYSTRIX){
             timerSupplierClass = TourineTimerHystrixCommandJsonSupplier.class;
